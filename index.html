@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Olivia 🤍</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #ffeef8 0%, #ffe4f0 50%, #ffd9e8 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Floating hearts animation */
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            animation: float 15s infinite;
+            opacity: 0;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            max-width: 800px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            padding: 60px 50px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            color: #ff6b9d;
+            margin-bottom: 10px;
+            font-family: 'Brush Script MT', cursive;
+        }
+
+        .header .to {
+            font-size: 1.4em;
+            color: #c44569;
+            font-style: italic;
+        }
+
+        .divider {
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(to right, #ff6b9d, #c44569);
+            margin: 30px auto;
+        }
+
+        .letter {
+            line-height: 1.8;
+            color: #333;
+            font-size: 1.1em;
+            text-align: left;
+        }
+
+        .letter p {
+            margin-bottom: 20px;
+        }
+
+        .salutation {
+            font-style: italic;
+            color: #c44569;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .signature {
+            text-align: right;
+            margin-top: 40px;
+            font-style: italic;
+            color: #c44569;
+            font-size: 1.2em;
+        }
+
+        .signature .from {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        /* Decorative elements */
+        .corner-decoration {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            opacity: 0.1;
+        }
+
+        .corner-decoration.top-left {
+            top: 20px;
+            left: 20px;
+            border-top: 3px solid #ff6b9d;
+            border-left: 3px solid #ff6b9d;
+        }
+
+        .corner-decoration.bottom-right {
+            bottom: 20px;
+            right: 20px;
+            border-bottom: 3px solid #ff6b9d;
+            border-right: 3px solid #ff6b9d;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 30px;
+            }
+
+            .header h1 {
+                font-size: 2.2em;
+            }
+
+            .letter {
+                font-size: 1em;
+            }
+        }
+
+        /* Big heart in center before opening */
+        .envelope-cover {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            cursor: pointer;
+            transition: opacity 1s ease;
+        }
+
+        .envelope-cover.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .big-heart {
+            font-size: 120px;
+            animation: heartbeat 1.5s infinite;
+            color: white;
+        }
+
+        .open-message {
+            color: white;
+            font-size: 1.5em;
+            margin-top: 30px;
+            font-family: 'Georgia', serif;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        /* Envelope splash GIF: stable, larger, square */
+        .envelope-cover .splash-image {
+            width: 340px;
+            height: 340px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+            margin-top: 24px;
+            animation: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .envelope-cover .splash-image {
+                width: 240px;
+                height: 240px;
+            }
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(1.1);
+            }
+            50% {
+                transform: scale(1);
+            }
+        }
+
+        /* Valentine Question Screen */
+        .valentine-question {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ffeef8 0%, #ffe4f0 50%, #ffd9e8 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+            transition: opacity 1s ease;
+        }
+
+        .valentine-question.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .question-title {
+            font-size: 2.5em;
+            color: #c44569;
+            font-family: 'Georgia', serif;
+            margin-bottom: 50px;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .cat-image {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.3);
+            animation: float-gentle 3s ease-in-out infinite;
+        }
+
+        @keyframes float-gentle {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .button-container {
+            display: flex;
+            gap: 30px;
+            position: relative;
+        }
+
+        .yes-button, .no-button {
+            padding: 20px 50px;
+            font-size: 1.5em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Georgia', serif;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .yes-button {
+            background: linear-gradient(135deg, #ff6b9d, #c44569);
+            color: white;
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
+        }
+
+        .yes-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(255, 107, 157, 0.6);
+        }
+
+        .no-button {
+            background: #f0f0f0;
+            color: #666;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: fixed; /* allow teleporting across the viewport */
+            z-index: 1004;
+        }
+
+        .yes-button {
+            position: relative; /* keep yes clickable above the floating no */
+            z-index: 1005;
+        }
+
+        @media (max-width: 768px) {
+            .question-title {
+                font-size: 1.8em;
+            }
+
+            .yes-button, .no-button {
+                padding: 15px 35px;
+                font-size: 1.2em;
+            }
+
+            .button-container {
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Valentine Question -->
+    <div class="valentine-question" id="valentine-question">
+        <img src="cat.jpeg" alt="Cute cat with hearts" class="cat-image">
+        <h1 class="question-title">Olivia, will you be my Valentine? 💕</h1>
+        <div class="button-container">
+            <button class="yes-button" onclick="sayYes()">Yes! 🤍</button>
+            <button class="no-button" id="noButton" tabindex="-1">No</button>
+        </div>
+    </div>
+
+    <!-- Envelope Cover -->
+    <div class="envelope-cover" id="envelope" onclick="openLetter()">
+        <div class="big-heart">🤍</div>
+        <div class="open-message">Click to open your Valentine's letter from Ivan</div>
+        <img src="green-fn-splash.gif" alt="greenfn" class="splash-image">
+    </div>
+
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="corner-decoration top-left"></div>
+        <div class="corner-decoration bottom-right"></div>
+        
+        <div class="header">
+            <h1>Happy Valentine's Day</h1>
+            <div class="to">For Olivia 🤍</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="letter">
+            <p class="salutation">My love,</p>
+            
+            <p>Happy Valentine's Day 🤍  I've been thinking a lot about how to put everything I feel into words, and even now it feels like no letter could fully capture what you mean to me.</p>
+
+            <p>From the moment you came into my life, things started to feel different in the best way. You brought a sense of peace and warmth that I didn't even realize I was missing. Being with you feels natural, effortless, and safe, like I can fully be myself and autistic without fear or pretending. That's something incredibly rare, and I never take it for granted.</p>
+
+            <p>I love the little things about you just as much as the big ones. The way you laugh, the way you care so deeply, the way you show up for the people you love. I love how strong you are, how thoughtful you are, and how you somehow make every day feel lighter just by being part of it. Even when life gets overwhelming, knowing I have you makes everything feel manageable.</p>
+
+            <p>You've taught me so much without even trying - about patience, about understanding, and about what it really means to care for someone. You make me want to be better, not out of pressure, but because loving you makes me want to grow. I want to be someone you can always rely on, someone who supports your dreams, stands by you through the hard days, and celebrates every win with you.</p>
+
+            <p>This being our first Valentine's together makes it even more special to me. It's not just about today, it's about all the memories we're creating and all the ones we haven't even lived yet. I think about the future with you and it feels exciting, comforting, and full of possibility. Wherever life takes us, I want to walk through it with you, side by side. (Summer 2026 hehe)</p>
+
+            <p>Thank you for choosing me, for believing in me, and for loving me the way you do. Thank you for your patience, your kindness, and your heart. I don't say this lightly, you mean more to me than words can explain.</p>
+
+            <p>I promise to keep showing up for you, to keep listening, to keep learning, and to keep loving you with everything I have. Today, tomorrow, and every day after.</p>
+
+            <p>I love you more than I can put into words, always and forever.</p>
+
+            <div class="signature">
+                <div class="from">Your diva,</div>
+                <div>Ivan</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create floating hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '🤍';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            heart.style.animationDelay = Math.random() * 5 + 's';
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 20000);
+        }
+
+        // Create hearts periodically
+        setInterval(createHeart, 800);
+
+        // Create initial hearts
+        for (let i = 0; i < 10; i++) {
+            setTimeout(createHeart, i * 300);
+        }
+
+        // Open letter function
+        function openLetter() {
+            document.getElementById('envelope').classList.add('hidden');
+        }
+
+        // Move the No button to a random position on the viewport
+        function moveButton() {
+            const button = document.getElementById('noButton');
+            const padding = 20;
+            const maxX = Math.max(0, window.innerWidth - button.offsetWidth - padding);
+            const maxY = Math.max(0, window.innerHeight - button.offsetHeight - padding);
+            const randomX = Math.floor(Math.random() * maxX) + padding;
+            const randomY = Math.floor(Math.random() * maxY) + padding;
+
+            button.style.left = randomX + 'px';
+            button.style.top = randomY + 'px';
+        }
+
+        // Place the No button initially near the Yes button (but fixed)
+        function positionNoButtonInitial() {
+            const button = document.getElementById('noButton');
+            const yes = document.querySelector('.yes-button');
+            if (!button || !yes) return;
+            const rect = yes.getBoundingClientRect();
+            const offset = 16;
+            let left = rect.right + offset;
+            let top = rect.top;
+            if (left + button.offsetWidth > window.innerWidth) {
+                left = rect.left;
+                top = rect.bottom + offset;
+            }
+            // Ensure within viewport
+            left = Math.min(Math.max(left, 10), window.innerWidth - button.offsetWidth - 10);
+            top = Math.min(Math.max(top, 10), window.innerHeight - button.offsetHeight - 10);
+            button.style.left = left + 'px';
+            button.style.top = top + 'px';
+        }
+
+        // When Yes is clicked
+        function sayYes() {
+            document.getElementById('valentine-question').classList.add('hidden');
+        }
+
+        // Prevent clicking "No" and make it run away on hover/touch/click/focus
+        window.addEventListener('load', () => {
+            const noBtn = document.getElementById('noButton');
+            if (!noBtn) return;
+
+            // initial placement
+            positionNoButtonInitial();
+
+            noBtn.addEventListener('mouseenter', moveButton);
+            noBtn.addEventListener('mouseover', moveButton);
+            noBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                moveButton();
+            });
+            noBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                moveButton();
+            }, { passive: false });
+            noBtn.addEventListener('focus', moveButton);
+
+            // Reposition if viewport changes
+            window.addEventListener('resize', positionNoButtonInitial);
+        });
+    </script>
+</body>
+</html>
