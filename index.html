@@ -321,6 +321,41 @@
                 gap: 20px;
             }
         }
+
+        /* Music toggle button */
+        .music-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff6b9d, #c44569);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
+            z-index: 999;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .music-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .music-toggle {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 1.2em;
+            }
+        }
     </style>
 </head>
 <body>
@@ -334,6 +369,14 @@
             <button class="no-button" id="noButton" tabindex="-1">No</button>
         </div>
     </div>
+
+    <!-- Background Music -->
+    <audio id="background-music" loop>
+        <source src="musicbg.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Music Toggle Button -->
+    <button class="music-toggle" id="musicToggle" onclick="toggleMusic()" title="Toggle music">🎵</button>
 
     <!-- Envelope Cover -->
     <div class="envelope-cover" id="envelope" onclick="openLetter()">
@@ -382,6 +425,38 @@
     </div>
 
     <script>
+        let musicPlaying = false;
+
+        // Toggle music function
+        function toggleMusic() {
+            const audio = document.getElementById('background-music');
+            const button = document.getElementById('musicToggle');
+            
+            if (musicPlaying) {
+                audio.pause();
+                button.textContent = '🔇';
+                musicPlaying = false;
+            } else {
+                audio.play().catch(err => {
+                    console.log('Audio play failed:', err);
+                });
+                button.textContent = '🎵';
+                musicPlaying = true;
+            }
+        }
+
+        // Auto-start music on first user interaction
+        document.addEventListener('click', () => {
+            if (!musicPlaying) {
+                const audio = document.getElementById('background-music');
+                audio.play().catch(err => {
+                    console.log('Audio play failed:', err);
+                });
+                document.getElementById('musicToggle').textContent = '🎵';
+                musicPlaying = true;
+            }
+        }, { once: true });
+
         // Create floating hearts
         function createHeart() {
             const heart = document.createElement('div');
