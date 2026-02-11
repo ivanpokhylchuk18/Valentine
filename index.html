@@ -92,6 +92,23 @@
 
         .letter p {
             margin-bottom: 20px;
+            opacity: 0;
+        }
+
+        /* Animation class that will be added via JavaScript */
+        .letter p.animate {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .salutation {
@@ -196,7 +213,6 @@
             border-radius: 12px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
             margin-top: 24px;
-            animation: none !important;
         }
 
         @media (max-width: 768px) {
@@ -287,6 +303,8 @@
             background: linear-gradient(135deg, #ff6b9d, #c44569);
             color: white;
             box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
+            position: relative;
+            z-index: 1005;
         }
 
         .yes-button:hover {
@@ -298,13 +316,9 @@
             background: #f0f0f0;
             color: #666;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            position: fixed; /* allow teleporting across the viewport */
+            position: fixed;
             z-index: 1004;
-        }
-
-        .yes-button {
-            position: relative; /* keep yes clickable above the floating no */
-            z-index: 1005;
+            transition: all 0.3s ease;
         }
 
         @media (max-width: 768px) {
@@ -427,6 +441,16 @@
     <script>
         let musicPlaying = false;
 
+        // Animate letter paragraphs with proper timing
+        function animateLetterParagraphs() {
+            const letterParagraphs = document.querySelectorAll('.letter p');
+            letterParagraphs.forEach((p, index) => {
+                setTimeout(() => {
+                    p.classList.add('animate');
+                }, index * 200); // 200ms delay between each paragraph
+            });
+        }
+
         // Toggle music function
         function toggleMusic() {
             const audio = document.getElementById('background-music');
@@ -446,14 +470,16 @@
         }
 
         // Auto-start music on first user interaction
+        let musicStarted = false;
         document.addEventListener('click', () => {
-            if (!musicPlaying) {
+            if (!musicStarted) {
                 const audio = document.getElementById('background-music');
                 audio.play().catch(err => {
                     console.log('Audio play failed:', err);
                 });
                 document.getElementById('musicToggle').textContent = '🎵';
                 musicPlaying = true;
+                musicStarted = true;
             }
         }, { once: true });
 
@@ -483,6 +509,8 @@
         // Open letter function
         function openLetter() {
             document.getElementById('envelope').classList.add('hidden');
+            // Start animating paragraphs after envelope is opened
+            setTimeout(animateLetterParagraphs, 500);
         }
 
         // Move the No button to a random position on the viewport
@@ -503,17 +531,23 @@
             const button = document.getElementById('noButton');
             const yes = document.querySelector('.yes-button');
             if (!button || !yes) return;
+            
             const rect = yes.getBoundingClientRect();
-            const offset = 16;
-            let left = rect.right + offset;
+            const gap = 30; // Match the gap in button-container
+            
+            let left = rect.right + gap;
             let top = rect.top;
-            if (left + button.offsetWidth > window.innerWidth) {
+            
+            // If button would go off screen, position below
+            if (left + button.offsetWidth > window.innerWidth - 20) {
                 left = rect.left;
-                top = rect.bottom + offset;
+                top = rect.bottom + 20;
             }
+            
             // Ensure within viewport
             left = Math.min(Math.max(left, 10), window.innerWidth - button.offsetWidth - 10);
             top = Math.min(Math.max(top, 10), window.innerHeight - button.offsetHeight - 10);
+            
             button.style.left = left + 'px';
             button.style.top = top + 'px';
         }
@@ -523,14 +557,15 @@
             document.getElementById('valentine-question').classList.add('hidden');
         }
 
-        // Prevent clicking "No" and make it run away on hover/touch/click/focus
+        // Initialize when page loads
         window.addEventListener('load', () => {
             const noBtn = document.getElementById('noButton');
             if (!noBtn) return;
 
-            // initial placement
+            // Initial placement
             positionNoButtonInitial();
 
+            // Make button run away on various interactions
             noBtn.addEventListener('mouseenter', moveButton);
             noBtn.addEventListener('mouseover', moveButton);
             noBtn.addEventListener('click', (e) => {
