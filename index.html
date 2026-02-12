@@ -819,6 +819,92 @@
                 font-size: 1.2em;
             }
         }
+
+        /* Countdown Timer Styles */
+        .countdown-section {
+            text-align: center;
+            margin: 50px 0 30px;
+            padding: 30px;
+            background: linear-gradient(135deg, #fff5f8 0%, #ffe8f0 100%);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.2);
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 2.5s forwards;
+        }
+
+        .countdown-title {
+            font-size: 2em;
+            color: #ff6b9d;
+            font-family: 'Brush Script MT', cursive;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(255, 107, 157, 0.3);
+        }
+
+        .countdown-subtitle {
+            color: #c44569;
+            font-style: italic;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+        }
+
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .countdown-item {
+            background: white;
+            padding: 20px 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.2);
+            min-width: 100px;
+            transition: transform 0.3s;
+        }
+
+        .countdown-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .countdown-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #ff6b9d;
+            display: block;
+            font-family: 'Georgia', serif;
+        }
+
+        .countdown-label {
+            font-size: 0.9em;
+            color: #c44569;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .countdown-title {
+                font-size: 1.6em;
+            }
+
+            .countdown-timer {
+                gap: 15px;
+            }
+
+            .countdown-item {
+                padding: 15px 20px;
+                min-width: 80px;
+            }
+
+            .countdown-number {
+                font-size: 2em;
+            }
+
+            .countdown-label {
+                font-size: 0.8em;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1013,6 +1099,30 @@
             </div>
         </div>
 
+        <!-- Countdown Timer -->
+        <div class="countdown-section">
+            <div class="countdown-title">Countdown to Our Summer 2026 ☀️</div>
+            <div class="countdown-subtitle">The most fun summer ever starts in...</div>
+            <div class="countdown-timer">
+                <div class="countdown-item">
+                    <span class="countdown-number" id="days">--</span>
+                    <span class="countdown-label">Days</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="hours">--</span>
+                    <span class="countdown-label">Hours</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="minutes">--</span>
+                    <span class="countdown-label">Minutes</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="seconds">--</span>
+                    <span class="countdown-label">Seconds</span>
+                </div>
+            </div>
+        </div>
+
         <div class="action-buttons">
             <button class="view-photos-btn" onclick="openGallery()">View Our Memories 📸</button>
             <button class="view-guestbook-btn" onclick="openGuestbook()">Our Guestbook 💌</button>
@@ -1198,9 +1308,11 @@
             for (let i = 0; i < confettiCount; i++) {
                 setTimeout(() => {
                     const confetti = document.createElement('div');
-                    confetti.classList.add('confetti', 'heart');    
+                    confetti.classList.add('confetti', 'heart');
+                    
                     confetti.style.left = Math.random() * 100 + '%';
                     confetti.style.top = '-50px';
+                    
                     confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
                     confetti.style.animationDelay = (Math.random() * 0.5) + 's';
                     
@@ -1421,7 +1533,46 @@
             if (window.firebaseReady) {
                 window.loadMessagesFromFirebase();
             }
+
+            // Start countdown timer
+            startCountdown();
         });
+
+        // Countdown Timer to May 7th, 2026
+        function startCountdown() {
+            const targetDate = new Date('May 7, 2026 00:00:00').getTime();
+
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+
+                if (distance < 0) {
+                    // Countdown finished
+                    document.getElementById('days').textContent = '0';
+                    document.getElementById('hours').textContent = '0';
+                    document.getElementById('minutes').textContent = '0';
+                    document.getElementById('seconds').textContent = '0';
+                    document.querySelector('.countdown-subtitle').textContent = 'Summer is here! ☀️🤍';
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById('days').textContent = days;
+                document.getElementById('hours').textContent = hours;
+                document.getElementById('minutes').textContent = minutes;
+                document.getElementById('seconds').textContent = seconds;
+            }
+
+            // Update immediately
+            updateCountdown();
+
+            // Update every second
+            setInterval(updateCountdown, 1000);
+        }
     </script>
 </body>
 </html>
