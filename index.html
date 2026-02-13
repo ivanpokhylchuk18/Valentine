@@ -206,7 +206,27 @@
             animation-delay: 2.2s;
         }
 
+        .download-letter-btn {
+            padding: 18px 45px;
+            font-size: 1.3em;
+            background: linear-gradient(135deg, #ff6b9d, #c44569);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Georgia', serif;
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
+            transition: transform 0.3s, box-shadow 0.3s;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 2.4s forwards;
+        }
+
         .view-photos-btn:hover, .view-guestbook-btn:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 15px 40px rgba(255, 107, 157, 0.6);
+        }
+
+        .download-letter-btn:hover {
             transform: scale(1.05) translateY(-2px);
             box-shadow: 0 15px 40px rgba(255, 107, 157, 0.6);
         }
@@ -315,6 +335,13 @@
         }
 
         .slide img {
+            max-width: 100%;
+            max-height: 450px;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .slide video {
             max-width: 100%;
             max-height: 450px;
             object-fit: contain;
@@ -613,7 +640,7 @@
                 flex-direction: column;
             }
 
-            .view-photos-btn, .view-guestbook-btn {
+            .view-photos-btn, .view-guestbook-btn, .download-letter-btn {
                 width: 100%;
             }
         }
@@ -1016,10 +1043,18 @@
                     <img src="img/image12.jpeg" alt="Memory 12" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     <div class="slide-placeholder" style="display:none;">Photo 12<br>Replace with: photo12.jpg</div>
                 </div>
+
+                <!-- Video 13 -->
+                <div class="slide">
+                    <video src="img/video1.mov" controls loop muted playsinline onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="slide-placeholder" style="display:none;">Video 1<br>Replace with: video1.mp4</div>
+                </div>
             </div>
 
             <div class="slide-counter">
-                <span id="current-slide">1</span> / 12
+                <span id="current-slide">1</span> / 13
             </div>
 
             <div class="slideshow-controls">
@@ -1126,6 +1161,7 @@
         <div class="action-buttons">
             <button class="view-photos-btn" onclick="openGallery()">View Our Memories 📸</button>
             <button class="view-guestbook-btn" onclick="openGuestbook()">Our Guestbook 💌</button>
+            <button class="download-letter-btn" onclick="downloadLetter()">Download Letter 💕</button>
         </div>
     </div>
 
@@ -1165,7 +1201,7 @@
     <script>
         let musicPlaying = false;
         let currentSlide = 0;
-        const totalSlides = 12;
+        const totalSlides = 13;
 
         // Escape HTML to prevent XSS
         function escapeHtml(text) {
@@ -1416,9 +1452,60 @@
             document.getElementById('guestbook-page').classList.remove('active');
         }
 
+        // Download letter as text file
+        function downloadLetter() {
+            const letterText = `Happy Valentine's Day 🤍
+For Olivia
+
+My love,
+
+Happy Valentine's Day 🤍  I've been thinking a lot about how to put everything I feel into words, and even now it feels like no letter could fully capture what you mean to me.
+
+From the moment you came into my life, things started to feel different in the best way. You brought a sense of peace and warmth that I didn't even realize I was missing. Being with you feels natural, effortless, and safe, like I can fully be myself and autistic without fear or pretending. That's something incredibly rare, and I never take it for granted.
+
+I love the little things about you just as much as the big ones. The way you laugh, the way you care so deeply, the way you show up for the people you love. I love how strong you are, how thoughtful you are, and how you somehow make every day feel lighter just by being part of it. Even when life gets overwhelming, knowing I have you makes everything feel manageable.
+
+You've taught me so much without even trying - about patience, about understanding, and about what it really means to care for someone. You make me want to be better, not out of pressure, but because loving you makes me want to grow. I want to be someone you can always rely on, someone who supports your dreams, stands by you through the hard days, and celebrates every win with you.
+
+This being our first Valentine's together makes it even more special to me. It's not just about today, it's about all the memories we're creating and all the ones we haven't even lived yet. I think about the future with you and it feels exciting, comforting, and full of possibility. Wherever life takes us, I want to walk through it with you, side by side. (Summer 2026 hehe)
+
+Thank you for choosing me, for believing in me, and for loving me the way you do. Thank you for your patience, your kindness, and your heart. I don't say this lightly, you mean more to me than words can explain.
+
+I promise to keep showing up for you, to keep listening, to keep learning, and to keep loving you with everything I have. Today, tomorrow, and every day after.
+
+I love you more than I can put into words, always and forever.
+
+Your diva,
+Ivan
+
+Valentine's Day 2025`;
+
+            // Create blob and download
+            const blob = new Blob([letterText], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Valentines_Letter_From_Ivan.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+
+            // Show sparkle feedback
+            createSparkle(window.innerWidth / 2, window.innerHeight / 2);
+        }
+
         function showSlide(index) {
             const slides = document.querySelectorAll('.slide');
-            slides.forEach(slide => slide.classList.remove('active'));
+            slides.forEach(slide => {
+                slide.classList.remove('active');
+                // Pause any videos when leaving slide
+                const video = slide.querySelector('video');
+                if (video) {
+                    video.pause();
+                    video.currentTime = 0;
+                }
+            });
             
             if (index >= totalSlides) {
                 currentSlide = 0;
@@ -1429,6 +1516,15 @@
             }
             
             slides[currentSlide].classList.add('active');
+            
+            // Auto-play video when slide becomes active
+            const activeVideo = slides[currentSlide].querySelector('video');
+            if (activeVideo) {
+                activeVideo.play().catch(err => {
+                    console.log('Video autoplay failed:', err);
+                });
+            }
+            
             document.getElementById('current-slide').textContent = currentSlide + 1;
         }
 
@@ -1439,13 +1535,6 @@
         function previousSlide() {
             showSlide(currentSlide - 1);
         }
-
-        // Auto-advance slideshow every 4 seconds when gallery is open
-        setInterval(() => {
-            if (document.getElementById('gallery-page').classList.contains('active')) {
-                nextSlide();
-            }
-        }, 4000);
 
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
